@@ -1,0 +1,75 @@
+{% extends 'AdminTemplate/dashboard.html.twig' %}
+{% block title%} Liste des payments{% endblock %}
+
+{% block body %}
+
+      <head>  
+           <title>Webslesson Tutorial | Make Pagination using Jquery, PHP, Ajax and MySQL</title>  
+           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
+           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
+      </head>  
+ {% if paymentt %}
+    <table id="payments" class="table table-striped">
+      <thead>
+      <tr>
+
+<th>RIB Bancaire</th>
+
+<th>dateExpiration</th>
+<th>civilite</th>
+<th>nom</th>
+<th>Action</th>
+
+</tr>
+      </thead>
+      <tbody>
+        {% for payment in paymentt %}
+         <tr>
+
+<td>{{payment.numeroCompte}}</td>
+
+<td>{{payment.dateExpiration | date }}</td>
+<td>{{payment.civilite}}</td>
+<td>{{payment.personne.nom}}</td>
+
+
+
+
+
+           <td>
+           
+              <a href="/payment/{{ payment.id }}" class="btn btn-success">Facture</a>
+              <a href="/payment/edit/{{ payment.id }}" class="btn btn-warning">Modifier</a>
+              <a href="/payment/delete/{{ payment.id }}" class="btn btn-danger" 
+              onclick="return confirm('Etes-vous sûr de supprimer  payment?');" >Supprimer</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Aucun payment</p>
+  {% endif %} 
+   <script>  
+ $(document).ready(function(){  
+      load_data();  
+      function load_data(page)  
+      {  
+           $.ajax({  
+                url:"pagination.php",  
+                method:"POST",  
+                data:{page:page},  
+                success:function(data){  
+                     $('#pagination_data').html(data);  
+                }  
+           })  
+      }  
+      $(document).on('click', '.pagination_link', function(){  
+           var page = $(this).attr("id");  
+           load_data(page);  
+      });  
+ }); 
+{% endblock %}
+
+
